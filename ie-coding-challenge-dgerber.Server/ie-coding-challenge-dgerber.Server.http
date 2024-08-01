@@ -1,0 +1,6 @@
+@ie_coding_challenge_dgerber.Server_HostAddress = http://localhost:5111
+
+GET {{ie_coding_challenge_dgerber.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

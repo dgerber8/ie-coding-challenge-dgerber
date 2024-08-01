@@ -1,0 +1,23 @@
+{
+  "Version": 1,
+  "Hash": "uetjetq9J2T/9u4qgDbU0hq3ONq2wKPmbPOp3oznXc8=",
+  "Source": "ie-coding-challenge-dgerber.Server",
+  "BasePath": "_content/ie-coding-challenge-dgerber.Server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\Users\\8gerb\\source\\repos\\ie-coding-challenge-dgerber\\ie-coding-challenge-dgerber.client\\ie-coding-challenge-dgerber.client.esproj",
+      "Version": 2,
+      "Source": "ie-coding-challenge-dgerber.client",
+      "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
