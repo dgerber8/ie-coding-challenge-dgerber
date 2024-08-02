@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ie_coding_challenge_dgerber.Server.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ie_coding_challenge_dgerber.Server.Controllers
 {
@@ -80,6 +81,7 @@ namespace ie_coding_challenge_dgerber.Server.Controllers
             _context.GivenInputs.Add(inputData);
             await _context.SaveChangesAsync();
 
+            Console.WriteLine("Given input data " + inputData.FileName);
             return CreatedAtAction(nameof(GetInputData), new { id = inputData.Id }, inputData);
         }
 
