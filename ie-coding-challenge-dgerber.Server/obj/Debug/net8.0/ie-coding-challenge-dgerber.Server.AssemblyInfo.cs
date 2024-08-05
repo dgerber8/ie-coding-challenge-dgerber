@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ie-coding-challenge-dgerber.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+781137fbc030cd8a7b153121cdb6a59c652eae2b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+024ad43f82ba892cc1da8a31c9358e72a51db740")]
 [assembly: System.Reflection.AssemblyProductAttribute("ie-coding-challenge-dgerber.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ie-coding-challenge-dgerber.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

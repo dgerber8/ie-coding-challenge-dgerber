@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import './App.css';
-import axios from 'axios';
-
+import { readFile } from 'fs/promises';
+const ENGINE_ID = ["07", "e0"]
+const DONGLE_ID = ["07", "e8"]
 function App() {
     const [file, setFile] = useState<File | undefined>();
     const [fileContent, setFileContent] = useState("");
+    const [arrBuffer, setArrBuffer] = useState<ArrayBuffer>();
+    const [roperations, setRoprations] = useState([]);
 
-    function readFileToArrayBuffer(file) {
+    function readFileToArrayBuffer(file) : Promise<ArrayBuffer | string>{
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
 
@@ -29,35 +32,100 @@ function App() {
             const hex = '0' + uint8Array[i].toString(16);
             hexString += hex.substring(hex.length - 2) + ' ';
         }
-        console.log(hexString.match(/.{48}/g))
+        console.log(hexString.match(/.{51}/g))
         return hexString;
     }
+    function grabNextLine() {
+        let hexString = ''
+        let row = new Uint8Array(arrBuffer.slice(0, 17))
+        
+
+        for (let i = 0; i < row.length; i++) {
+            const hex = '0' + row[i].toString(16);
+            hexString += hex.substring(hex.length - 2) + ' ';
+        }
+
+        return hexString.slice(0, -1).split(' ')
+    }
+    function getEngineId(row) {
+        return [row[6], row[7]]
+    }
+    function getOperationType(row) {
+        return row[8].charAt(0)
+    }
+
+    function getServiceNumber(row) {
+        if (getOperationType(row) == '0') {
+            return row[10]
+        } if (getOperationType(row) == '1') {
+            return row[11]
+        }
+        if (getOperationType(row) == '2') {
+            return undefined
+        }
+    }
+    async function processData(test_num_max){
+        let startFound = false;
+        let row;
+        let test_i = 0
+        let hexString = "";
+        while (!startFound && test_i < test_num_max) {
+            row = grabNextLine()
+            
+
+            setArrBuffer(arrBuffer.slice(17))
+            if (getEngineId(row) == ENGINE_ID && getServiceNumber(row) == '36') {
+                console.log(`found on row: ${test_i}`)
+                hexString = JSON.stringify(row)
+                startFound = true
+            }
+
+            test_i += 1
+        }
+        return hexString
+    };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files[0]
         if (file) {
             readFileToArrayBuffer(file)
                 .then(arrayBuffer => {
+                    if ( arrayBuffer instanceof ArrayBuffer) {
+                        setArrBuffer(arrayBuffer)
+                    }
                     const hexString = arrayBufferToHexString(arrayBuffer);
-                    setFileContent(hexString);
+                    //setFileContent(hexString);
                 })
                 .catch(error => {
                     console.error("File read failed:", error);
                 });
         }
-
-
-
-
         if (event.target.files) {
-            const file = event.target.files[0]
             setFile(event.target.files[0]);
+
+        }
+    }
+
+    const handleButton = () => {
+        let pData = async () => {
+            const hexString = await processData(1000);
+            setFileContent(hexString)
+        }
+        if (arrBuffer) {
+            pData()
         }
     }
 
     useEffect(() => {
+        let pData = async () => {
+            const hexString = JSON.stringify(grabNextLine());
+            setFileContent(hexString)
+        }
+        if (arrBuffer) {
+            pData()
+        }
         // Add any side effect logic here
-    }, []);
+    }, [file]);
    
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -71,13 +139,7 @@ function App() {
                     'content-type': 'multipart/form-data',
                 },
             };
-            axios.post(url, formData, config)
-                .then((response) => {
-                    console.log(response.data);
-                })
-                .catch((error) => {
-                    console.error("Error uploading file: ", error);
-                });
+            
         }
     }
 
@@ -93,6 +155,7 @@ function App() {
                 <h1>React File Upload </h1>
                 <input type="file" onChange={handleChange} />
                 <button type="submit" > Upload </button>
+                <button onClick={ handleButton } > Next Line </button>
             </form>
 
             <p> File Content Hex: </p>
